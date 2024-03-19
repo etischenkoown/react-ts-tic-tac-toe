@@ -6,8 +6,15 @@ import Square from "../Square/Square.tsx";
 
 export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
   const winner = calculateWinner(squares);
+  const isDraw = winner === null && squares.every((square) => square !== null);
   const nextSign: GameSign = xIsNext ? "X" : "O";
-  const status = winner ? `Winner: ${winner}` : `Next player: ${nextSign}`;
+  let status;
+
+  if (isDraw) {
+    status = "Draw";
+  } else {
+    status = winner ? `Winner: ${winner}` : `Next player: ${nextSign}`;
+  }
 
   function handleClick(i: number) {
     if (squares[i] || calculateWinner(squares)) {

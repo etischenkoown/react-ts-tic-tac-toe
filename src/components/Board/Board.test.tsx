@@ -54,6 +54,17 @@ describe("Board", () => {
     expect(screen.getByText(`Winner: ${sign}`)).not.toBeNull();
   });
 
+  test('renders "Draw" when there is no winner', () => {
+    const squares: Squares = [
+      "X", "O", "X",
+      "X", "O", "O",
+      "O", "X", "X"
+    ];
+    prepareBoard(getBoardProps({ squares }));
+
+    expect(screen.getByText("Draw")).not.toBeNull();
+  });
+
   test("correctly renders filled squares", () => {
     const squares: Squares = ["X", "O", "X", "O", "X", "O", null, null, null];
     prepareBoard(getBoardProps({ squares }));
