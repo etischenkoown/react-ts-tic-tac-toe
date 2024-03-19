@@ -1,11 +1,8 @@
 import { GameSign, Squares } from "../../types";
+import { BoardProps } from "./types.ts";
 import Square from "../Square/Square.tsx";
 
-interface BoardProps {
-  xIsNext: boolean;
-  squares: Squares;
-  onPlay: (squares: Squares) => void;
-}
+
 
 export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
   const winner = calculateWinner(squares);

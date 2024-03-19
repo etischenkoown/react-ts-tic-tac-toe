@@ -1,12 +1,12 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, test, expect, vi } from "vitest";
 import Square from "./Square.tsx";
 import { GameSign } from "../../types";
 
 const prepareButton = (content: GameSign, onClick: () => void = () => {}): HTMLElement => {
-  const { getByRole } = render(<Square value={content} onSquareClick={onClick} />);
-  return getByRole("button");
+  render(<Square value={content} onSquareClick={onClick} />);
+  return screen.getByRole("button");
 }
 
 describe("Square", () => {
