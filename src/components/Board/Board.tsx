@@ -1,5 +1,5 @@
-import { GameSign, Squares } from "../types";
-import Square from "./Square";
+import { GameSign, Squares } from "../../types";
+import Square from "../Square/Square.tsx";
 
 interface BoardProps {
   xIsNext: boolean;

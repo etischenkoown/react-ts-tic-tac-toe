@@ -1,4 +1,4 @@
-import { GameSign } from "../types";
+import { GameSign } from "../../types";
 
 interface SquareProps {
   value: GameSign;

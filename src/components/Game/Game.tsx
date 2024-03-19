@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Squares } from "../types";
-import Board from "./Board";
+import { Squares } from "../../types";
+import Board from "../Board/Board.tsx";
 
 type History = Squares[];
 
