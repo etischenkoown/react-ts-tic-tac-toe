@@ -1,9 +1,10 @@
 import { render } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import { describe, test, expect, vi } from "vitest";
 import Square from "./Square.tsx";
 import { GameSign } from "../../types";
 
-const prepareButton = (content: GameSign, onClick: () => void = () => {}): HTMLElement | null => {
+const prepareButton = (content: GameSign, onClick: () => void = () => {}): HTMLElement => {
   const { getByRole } = render(<Square value={content} onSquareClick={onClick} />);
   return getByRole("button");
 }
@@ -14,26 +15,20 @@ describe("Square", () => {
     expect(button).not.toBeNull();
   });
 
-  // @todo: utilize test`renders a button` to test the following
-  test("renders an empty square", () => {
-    const button = prepareButton(null);
-    expect(button?.textContent).toBe("");
+  test.each`
+  value   | result
+  ${null} | ${""}
+  ${"X"}  | ${"X"}
+  ${"O"}  | ${"O"}
+  `(`renders $result when 'value' prop is $value`, ({ value, result }) => {
+    const button = prepareButton(value);
+    expect(button.textContent).toBe(result);
   });
 
-  test("renders with X", () => {
-    const button = prepareButton("X");
-    expect(button?.textContent).toBe("X");
-  });
-
-  test("renders with O", () => {
-    const button = prepareButton("O");
-    expect(button?.textContent).toBe("O");
-  });
-
-  test("calls a prop function when the button is clicked", () => {
+  test("calls a prop function when the button is clicked", async () => {
     const onClick = vi.fn();
     const button = prepareButton("O", onClick);
-    button?.click();
+    await userEvent.click(button)
     expect(onClick).toHaveBeenCalled();
   });
 });
