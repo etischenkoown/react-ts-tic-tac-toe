@@ -11,7 +11,7 @@ const prepareButton = (content: GameSign, onClick: () => void = () => {}): HTMLE
 
 describe("Square", () => {
   test("renders a button", () => {
-    const button = prepareButton(null);
+    const button: HTMLElement = prepareButton(null);
     expect(button).not.toBeNull();
   });
 
@@ -21,14 +21,15 @@ describe("Square", () => {
   ${"X"}  | ${"X"}
   ${"O"}  | ${"O"}
   `(`renders $result when 'value' prop is $value`, ({ value, result }) => {
-    const button = prepareButton(value);
+    const button: HTMLElement = prepareButton(value);
     expect(button.textContent).toBe(result);
   });
 
   test("calls a prop function when the button is clicked", async () => {
     const onClick = vi.fn();
-    const button = prepareButton("O", onClick);
+    const button: HTMLElement = prepareButton("O", onClick);
     await userEvent.click(button)
+
     expect(onClick).toHaveBeenCalled();
   });
 });

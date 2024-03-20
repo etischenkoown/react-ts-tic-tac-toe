@@ -24,7 +24,7 @@ const prepareBoard = ({ xIsNext, squares = createEmptySquares(), onPlay = () => 
 describe("Board", () => {
   test("renders 9 empty squares on a game start", () => {
     prepareBoard(getBoardProps());
-    const squares = screen.getAllByRole("button");
+    const squares: HTMLElement[] = screen.getAllByRole("button");
     expect(squares).toHaveLength(9);
   });
 
@@ -69,7 +69,7 @@ describe("Board", () => {
     const squares: Squares = ["X", "O", "X", "O", "X", "O", null, null, null];
     prepareBoard(getBoardProps({ squares }));
 
-    const renderedSquares = screen.getAllByRole("button");
+    const renderedSquares: HTMLElement[] = screen.getAllByRole("button");
     renderedSquares.forEach((square, index) => {
       expect(square.textContent).toBe(squares[index] || "");
     });
@@ -80,7 +80,7 @@ describe("Board", () => {
     const squares: Squares = ["X", "O", "X", "O", "X", "O", null, null, null];
     prepareBoard(getBoardProps({ squares, onPlay }));
 
-    const square = screen.getAllByRole("button")[0];
+    const square: HTMLElement = screen.getAllByRole("button")[0];
     await userEvent.click(square);
 
     expect(onPlay).not.toHaveBeenCalled();
@@ -91,7 +91,7 @@ describe("Board", () => {
     const squares: Squares = ["X", "X", "X", "O", "O", null, null, null, null];
     prepareBoard(getBoardProps({ squares, onPlay }));
 
-    const emptySquare = screen.getAllByRole("button")[5];
+    const emptySquare: HTMLElement = screen.getAllByRole("button")[5];
     await userEvent.click(emptySquare);
 
     expect(onPlay).not.toHaveBeenCalled();
@@ -102,7 +102,7 @@ describe("Board", () => {
     const squares: Squares = ["X", null, "X", "O", "O", null, null, null, null];
     prepareBoard(getBoardProps({ squares, onPlay }));
 
-    const emptySquare = screen.getAllByRole("button")[5];
+    const emptySquare: HTMLElement = screen.getAllByRole("button")[5];
     await userEvent.click(emptySquare);
 
     expect(onPlay).toHaveBeenCalled();
@@ -122,7 +122,7 @@ describe("Board", () => {
     const boardProps = getBoardProps({ xIsNext, squares: start, onPlay: vi.fn() });
     prepareBoard(boardProps);
 
-    const square = screen.getAllByRole("button")[squareIndex];
+    const square: HTMLElement = screen.getAllByRole("button")[squareIndex];
     await userEvent.click(square);
 
     expect(boardProps.onPlay).toHaveBeenCalledWith(next);
