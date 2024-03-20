@@ -42,19 +42,37 @@ describe("Board", () => {
   });
 
   test.each([
-    { sign: 'X' },
-    { sign: 'O' },
-  ])('renders "Winner: $sign" when $sign wins', ({ sign }) => {
+    { sign: "X" },
+    { sign: "O" },
+  ] as { sign: GameSign }[])("renders 'Winner: $sign' when $sign wins", ({ sign }) => {
     const squares = createEmptySquares();
-    squares[0] = sign as GameSign
-    squares[1] = sign as GameSign;
-    squares[2] = sign as GameSign;
+    squares[0] = sign;
+    squares[1] = sign;
+    squares[2] = sign;
     prepareBoard(getBoardProps({ squares }));
 
     expect(screen.getByText(`Winner: ${sign}`)).not.toBeNull();
   });
 
-  test('renders "Draw" when there is no winner', () => {
+  test("highlights 3 winning squares", () => {
+    const squares: GameSign[] = ["X", "X", "X", "O", "O", null, null, null, null];
+    prepareBoard(getBoardProps({ squares }));
+
+    const squareButtons: HTMLElement[] = screen.getAllByRole("button");
+    const highlightedSquares = squareButtons.filter(({ style }) => style.backgroundColor === 'lightgreen');
+    expect(highlightedSquares).toHaveLength(3);
+  });
+
+  test("doesn't highlight any squares on Draw", () => {
+    const squares: GameSign[] = ["X", "O", "X", "X", "O", "O", "O", "X", "X"];
+    prepareBoard(getBoardProps({ squares }));
+
+    const squareButtons: HTMLElement[] = screen.getAllByRole("button");
+    const highlightedSquares = squareButtons.filter(({ style }) => style.backgroundColor === 'lightgreen');
+    expect(highlightedSquares).toHaveLength(0);
+  });
+
+  test("renders 'Draw' when there is no winner", () => {
     const squares: Squares = [
       "X", "O", "X",
       "X", "O", "O",
@@ -116,7 +134,7 @@ describe("Board", () => {
       move: [3, "X"],
       next: ["X", "O", "O", "X", null, null, null, null, null]
     },
-  ] as { start: Squares, move: [number, GameSign], next: Squares }[])('triggers onPlay callback with correct squares when player $move.1 clicks a $move.0 square', async ({ start, move, next }) => {
+  ] as { start: Squares, move: [number, GameSign], next: Squares }[])("triggers onPlay callback with correct squares when player $move.1 clicks a $move.0 square", async ({ start, move, next }) => {
     const [squareIndex, sign]: [number, GameSign] = move;
     const xIsNext = sign === "X";
     const boardProps = getBoardProps({ xIsNext, squares: start, onPlay: vi.fn() });
