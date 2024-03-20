@@ -36,7 +36,33 @@ describe("Game", () => {
     await userEvent.click(squares[2]);
 
     const moves = screen.getAllByRole("button", { name: /^Go to move #[1-9]+$/ });
-    expect(moves).toHaveLength(3);
+    expect(moves).toHaveLength(2);
+  });
+
+  test("shows current move as 'You are at move #...' text", async () => {
+    render(<Game />);
+    const squares: HTMLElement[] = getSquaresElements();
+
+    await userEvent.click(squares[0]);
+    await userEvent.click(squares[1]);
+    await userEvent.click(squares[2]);
+
+    const currentMoveText = screen.getByText(/^You are at move #3/);
+    expect(currentMoveText).not.toBeNull();
+  });
+
+  test("shows current move as 'You are at move #...' after jumping to previous move", async () => {
+    render(<Game />);
+    const squares: HTMLElement[] = getSquaresElements();
+
+    await userEvent.click(squares[0]);
+    await userEvent.click(squares[1]);
+    await userEvent.click(squares[2]);
+    const goToMoveButton: HTMLElement = screen.getByRole("button", { name: "Go to move #2" });
+    await userEvent.click(goToMoveButton);
+
+    const currentMoveText = screen.getByText(/^You are at move #2/);
+    expect(currentMoveText).not.toBeNull();
   });
 
   test("show Go to game start button on the game start", () => {

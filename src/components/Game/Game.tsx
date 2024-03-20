@@ -22,15 +22,18 @@ export default function Game() {
 
   const moves = history.map((_squares: Squares, move: number) => {
     const description = move > 0 ? `Go to move #${move}` : "Go to game start";
+    const isCurrentMove = move === currentMove && move > 0;
+
     return (
       <li key={move}>
-        <button
+        {!isCurrentMove && <button
           onClick={() => {
             jumpTo(move);
           }}
         >
           {description}
-        </button>
+        </button>}
+        {isCurrentMove && <span>You are at move #{move}</span>}
       </li>
     );
   });
