@@ -2,8 +2,6 @@ import { GameSign, Squares } from "../../types";
 import { BoardProps } from "./types.ts";
 import Square from "../Square/Square.tsx";
 
-
-
 export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
   const winner = calculateWinner(squares);
   const isDraw = winner === null && squares.every((square) => square !== null);
@@ -26,24 +24,28 @@ export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
     onPlay(nextSquares);
   }
 
+  function renderSquaresRow(row: Squares, rowIndex: number) {
+    const boardSize = 3;
+
+    return row.map((squareValue: GameSign, squareIndex: number) => {
+      const squareTrueIndex = (rowIndex * boardSize) + squareIndex;
+      return (<Square key={squareTrueIndex} value={squareValue} onSquareClick={() => handleClick(squareTrueIndex)} />)
+    });
+  }
+
+  const squaresByRows = [squares.slice(0, 3), squares.slice(3, 6), squares.slice(6, 9)]
+  const squareButtons = squaresByRows.map((row, rowIndex) => {
+    return (
+      <div key={`row-${rowIndex}`} className="board">
+        {renderSquaresRow(row, rowIndex)}
+      </div>
+    )
+  });
+
   return (
     <>
       <div className="status">{status}</div>
-      <div className="board-row">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-      </div>
+      {squareButtons}
     </>
   );
 }
