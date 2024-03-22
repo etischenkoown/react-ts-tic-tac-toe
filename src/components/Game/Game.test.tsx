@@ -39,6 +39,35 @@ describe("Game", () => {
     expect(moves).toHaveLength(2);
   });
 
+  test("shows all moves in ascending order by default", async () => {
+    render(<Game />);
+    const squares: HTMLElement[] = getSquaresElements();
+
+    await userEvent.click(squares[0]);
+    await userEvent.click(squares[1]);
+    await userEvent.click(squares[2]);
+
+    const moves: HTMLElement[] = screen.getAllByRole("button", { name: /^Go to move #[1-9]+$/ });
+    moves.forEach((moveElement, index) => {
+      expect(moveElement.textContent?.includes((index + 1).toString())).toBeTruthy();
+    });
+  });
+
+  test("shows all moves in descending order after clicking Change order button", async () => {
+    render(<Game />);
+    const squares: HTMLElement[] = getSquaresElements();
+
+    await userEvent.click(squares[0]);
+    await userEvent.click(squares[1]);
+    await userEvent.click(squares[2]);
+    await userEvent.click(screen.getByRole("button", { name: "Change order" }));
+
+    const moves: HTMLElement[] = screen.getAllByRole("button", { name: /^Go to move #[1-9]+$/ });
+    moves.forEach((moveElement, index) => {
+      expect(moveElement.textContent?.includes((moves.length - index).toString())).toBeTruthy();
+    });
+  });
+
   test("shows current move as 'You are at move #...' text", async () => {
     render(<Game />);
     const squares: HTMLElement[] = getSquaresElements();

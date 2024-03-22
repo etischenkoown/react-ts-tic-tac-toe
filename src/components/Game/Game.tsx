@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Squares } from "../../types";
+import { Order, Squares } from "../../types";
 import Board from "../Board/Board.tsx";
 
 type History = Squares[];
@@ -7,6 +7,7 @@ type History = Squares[];
 export default function Game() {
   const [history, setHistory] = useState<History>([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
+  const [movesOrder, setMovesOrder] = useState(Order.ASC);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
@@ -18,6 +19,10 @@ export default function Game() {
 
   function jumpTo(nextMove: number) {
     setCurrentMove(nextMove);
+  }
+
+  function changeMovesOrder() {
+    setMovesOrder(movesOrder === Order.ASC ? Order.DESC : Order.ASC);
   }
 
   const moves = history.map((_squares: Squares, move: number) => {
@@ -44,7 +49,10 @@ export default function Game() {
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <button onClick={changeMovesOrder}>Change order</button>
+        <ol>
+          {movesOrder === Order.DESC ? moves.reverse() : moves}
+        </ol>
       </div>
     </div>
   );
