@@ -80,6 +80,25 @@ describe("Game", () => {
     expect(currentMoveText).not.toBeNull();
   });
 
+  test("shows current move coords in formal (player: row, col)", async () => {
+    render(<Game />);
+    const squares: HTMLElement[] = getSquaresElements();
+
+    let currentMoveText;
+
+    await userEvent.click(squares[2]);
+    currentMoveText = screen.getByText(/^\(X: 1, 3\)/);
+    expect(currentMoveText).not.toBeNull();
+
+    await userEvent.click(squares[4]);
+    currentMoveText = screen.getByText(/^\(O: 2, 2\)/);
+    expect(currentMoveText).not.toBeNull();
+
+    await userEvent.click(squares[6]);
+    currentMoveText = screen.getByText(/^\(X: 3, 1\)/);
+    expect(currentMoveText).not.toBeNull();
+  });
+
   test("shows current move as 'You are at move #...' after jumping to previous move", async () => {
     render(<Game />);
     const squares: HTMLElement[] = getSquaresElements();

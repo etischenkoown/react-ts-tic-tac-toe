@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Order, Squares } from "../../types";
+import { GameSign, Order, Squares } from "../../types";
 import Board from "../Board/Board.tsx";
 
 type History = Squares[];
@@ -25,6 +25,19 @@ export default function Game() {
     setMovesOrder(movesOrder === Order.ASC ? Order.DESC : Order.ASC);
   }
 
+  function getMoveCoords(move: number): string {
+    const historyMove: Squares = history[move];
+    const prevHistoryMove: Squares = history[move - 1];
+
+    const BOARD_SIZE = 3;
+    const addedIndex = historyMove.findIndex((player: GameSign, index) => prevHistoryMove[index] !== player);
+    const row = Math.ceil((addedIndex + 1) / BOARD_SIZE);
+    const col = (addedIndex % BOARD_SIZE) + 1;
+    const player: GameSign = move % 2 === 0 ? "O" : "X";
+
+    return `(${player}: ${row}, ${col})`
+  }
+
   const moves = history.map((_squares: Squares, move: number) => {
     const description = move > 0 ? `Go to move #${move}` : "Go to game start";
     const isCurrentMove = move === currentMove && move > 0;
@@ -39,6 +52,7 @@ export default function Game() {
           {description}
         </button>}
         {isCurrentMove && <span>You are at move #{move}</span>}
+        {move > 0 && " " + getMoveCoords(move)}
       </li>
     );
   });
